@@ -4,7 +4,7 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Habit\HabitController;
-use App\Http\Controllers\HabitCompleteController;
+use App\Http\Controllers\Api\Habit\HabitCompleteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,9 +24,20 @@ Route::prefix('')->group(function () {
 Route::prefix('habit')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('list', [HabitController::class,'getlistHabitsActive']);
-        Route::post('register', [HabitController::class,'registerHabit']);
-        Route::put('update/{id}', [HabitController::class,'updateHabit']);
-        Route::delete('delete/{id}', [HabitController::class,'deleteHabit']);
-        Route::get('done_skipped/{id}', [HabitCompleteController::class,'doneOrSkippedHabit']);
+        // Route::post('register', [HabitController::class,'registerHabit']);
+        // Route::put('update/{id}', [HabitController::class,'updateHabit']);
+        // Route::delete('delete/{id}', [HabitController::class,'deleteHabit']);
+        // Route::get('done_skipped/{id}', [HabitCompleteController::class,'doneOrSkippedHabit']);
     });
 });
+
+Route::prefix('habit-complete')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('list', [HabitCompleteController::class,'getlistHabitsComplete']);
+        Route::get('done_skipped/{id}', [HabitCompleteController::class,'doneOrSkippedHabit']);
+        // Route::post('register', [HabitController::class,'registerHabit']);
+        // Route::put('update/{id}', [HabitController::class,'updateHabit']);
+        // Route::delete('delete/{id}', [HabitController::class,'deleteHabit']);
+    });
+});
+
