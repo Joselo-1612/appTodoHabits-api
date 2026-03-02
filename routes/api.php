@@ -35,9 +35,6 @@ Route::prefix('habit-complete')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('list', [HabitCompleteController::class,'getlistHabitsComplete']);
         Route::get('done_skipped/{id}', [HabitCompleteController::class,'doneOrSkippedHabit']);
-        // Route::post('register', [HabitController::class,'registerHabit']);
-        // Route::put('update/{id}', [HabitController::class,'updateHabit']);
-        // Route::delete('delete/{id}', [HabitController::class,'deleteHabit']);
     });
 });
 

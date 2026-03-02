@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
 use App\Services\HabitCompleteService;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 
 class HabitCompleteController extends Controller
 {
@@ -35,14 +36,14 @@ class HabitCompleteController extends Controller
         }
     }
 
-    public function doneOrSkippedHabit($habitId, $status) {
+    public function doneOrSkippedHabit($habitId, Request $request) {
 
         try {
-
-            $habitComplete = $this->habitCompleteService->doneOrSkippedHabit($habitId, $status);
+            $date = $request->query('date');
+            $habitComplete = $this->habitCompleteService->doneOrSkippedHabit($habitId, $date);
 
             return ApiResponse::successResponse(
-                $habitComplete->getChanges(),
+                $habitComplete,
                 "habit complete updated successfully",
                 200
             );

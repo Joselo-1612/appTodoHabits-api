@@ -11,24 +11,25 @@ use Log;
 class HabitCompleteRepository
 {
 
-    public function getDetailHabitComplete($habitId)
+    public function getDetailHabitComplete($habitId, $date)
     {
         $userId = UtilHelper::userSessionId();
 
         return HabitComplete::join('habits', 'habits.hab_id', '=', 'habit_completes.hac_hab_id')
                 ->where('hac_hab_id', $habitId)
-                ->where('hac_date', Carbon::now()->format('Y-m-d'))
+                ->where('hac_date', $date)
                 ->where('habits.hab_use_id', $userId)
                 ->first();
     }
 
-    public function getListHabitComplete()
+    public function getListHabitComplete(array $weekDays)
     {
         $userId = UtilHelper::userSessionId();
 
         return Habit::join('habit_completes', 'habits.hab_id', 'habit_completes.hac_hab_id')
-        ->where('hac_is_done', 1)
         ->where('habits.hab_use_id', $userId)
+        ->whereIn('hac_date', $weekDays)
+        ->select('hac_date', 'hac_id', 'hab_id')
         ->get();
     }
 }

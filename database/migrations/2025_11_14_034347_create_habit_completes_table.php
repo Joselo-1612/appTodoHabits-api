@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('hac_id');
             $table->foreignId('hac_hab_id')->constrained('habits', 'hab_id');
             $table->date('hac_date');
-            $table->integer('hac_is_done')->default(0);
             $table->text('hac_notes')->nullable();
             $table->integer('hac_status')->default(1);
             $table->timestamps();
