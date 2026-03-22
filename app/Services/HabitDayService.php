@@ -16,4 +16,13 @@ class HabitDayService extends Controller
             ->pluck('had_day')
             ->toArray();
     }
+
+    public function createDaysHabit($habitsDays, $newHabit)
+    {
+        foreach ($habitsDays as $day) {
+            $newHabit->habitDays()->create([
+                'had_day' => $day,
+            ]);
+        }
+    }
 }

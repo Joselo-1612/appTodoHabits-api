@@ -13,11 +13,9 @@ class Habit extends Model
     protected $fillable = [
         'hab_name',
         'hab_description',
-        'hab_icon',
         'hab_type_recurrence',
         'hab_status',
-        'hab_use_id',
-        'hab_date'
+        'hab_use_id'
     ];
 
     // ------------------------
@@ -39,11 +37,6 @@ class Habit extends Model
         return $this->hab_description;
     }
 
-    public function getHabIcon()
-    {
-        return $this->hab_icon;
-    }
-
     public function getHabTypeRecurrence()
     {
         return $this->hab_type_recurrence;
@@ -57,11 +50,6 @@ class Habit extends Model
     public function getHabUseId()
     {
         return $this->hab_use_id;
-    }
-
-    public function getHabDate()
-    {
-        return $this->hab_date;
     }
 
     // ------------------------
@@ -80,12 +68,6 @@ class Habit extends Model
         return $this;
     }
 
-    public function setHabIcon($value)
-    {
-        $this->hab_icon = $value;
-        return $this;
-    }
-
     public function setHabTypeRecurrence($value)
     {
         $this->hab_type_recurrence = $value;
@@ -101,12 +83,6 @@ class Habit extends Model
     public function setHabUseId($value)
     {
         $this->hab_use_id = $value;
-        return $this;
-    }
-
-    public function setHabDate($value)
-    {
-        $this->hab_date = $value;
         return $this;
     }
 

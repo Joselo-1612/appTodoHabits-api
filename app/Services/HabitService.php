@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Helpers\HabitRecurrence;
+use App\Enums\HabitRecurrence;
+use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
 
@@ -13,20 +14,30 @@ class HabitService extends Controller
         protected HabitDayService $habitDayService
     ) {}
 
-    public function registerHabitAndHabitDays($data) {
+    public function registerHabitAndHabitDays($habit) {
 
-        $newHabit = Habit::create($data);
+        $newHabit = $this->createHabit($habit);
 
         if ($newHabit->getHabTypeRecurrence() == HabitRecurrence::PERSONALIZADO
-        && count($data["hab_days"]) > 0) {
-
-            foreach ($data["hab_days"] as $day) {
-                $newHabit->habitDays()->create([
-                    'had_day' => $day,
-                ]);
-            }
+        && count($habit["hab_days"]) > 0) {
+            $this->habitDayService->createDaysHabit($habit["hab_days"], $newHabit);
         }
 
         return $newHabit;
+    }
+
+    private function createHabit(array $habit) {
+        if (isset($habit["hab_id"])) {
+            $habitFound = Habit::find($habit["hab_id"]);
+            $habitFound->update($habit);
+            $habitResponse = $habitFound;
+        } else {
+            $userId = UtilHelper::userSessionId();
+            $habit["hab_use_id"] = $userId;
+
+            $habitResponse = Habit::create($habit);
+        }
+
+        return $habitResponse;
     }
 }
