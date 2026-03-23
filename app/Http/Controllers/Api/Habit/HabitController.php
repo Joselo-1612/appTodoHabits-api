@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Habit;
 
+use App\Enums\HabitEnum;
 use App\Helpers\StatusModel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Habit\StoreHabitRequest;
@@ -66,7 +67,7 @@ class HabitController extends Controller
 
         $habitDetail = Habit::findOrFail($habitId);
         $habitDetail->update([
-            "hab_status" => StatusModel::INACTIVE
+            "hab_status" => HabitEnum::INACTIVE->value
         ]);
 
         return ApiResponse::successResponse(

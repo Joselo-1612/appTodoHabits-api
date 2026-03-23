@@ -2,26 +2,24 @@
 
 namespace App\Services;
 
-use App\Helpers\StatusModel;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Habit\StoreHabitDayRequest;
+use App\Models\Habit;
 use App\Models\HabitDay;
 
 class HabitDayService extends Controller
 {
-    public function getListByHabitUser($habitId)
+    public function createUpdateDaysHabit(array $habitsDays, Habit $newHabit)
     {
-        return HabitDay::where('habit_id', $habitId)
-            ->where('had_status', StatusModel::ACTIVE)
-            ->pluck('had_day')
-            ->toArray();
-    }
+        $habitsDaysFind = $newHabit->habitDays()->pluck('had_day')->toArray();
 
-    public function createDaysHabit($habitsDays, $newHabit)
-    {
+        if (count($habitsDaysFind) > 0) {
+            $newHabit->habitDays()->delete();
+        }
+
         foreach ($habitsDays as $day) {
-            $newHabit->habitDays()->create([
+            HabitDay::create([
                 'had_day' => $day,
+                'had_hab_id' => $newHabit->getHabId(),
             ]);
         }
     }

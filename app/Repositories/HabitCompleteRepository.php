@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\HabitEnum;
 use App\Helpers\UtilHelper;
 use App\Models\Habit;
 use App\Models\HabitComplete;
@@ -28,8 +29,10 @@ class HabitCompleteRepository
 
         return Habit::join('habit_completes', 'habits.hab_id', 'habit_completes.hac_hab_id')
         ->where('habits.hab_use_id', $userId)
+        ->where('habits.hab_status', HabitEnum::ACTIVE->value)
         ->whereIn('hac_date', $weekDays)
         ->select('hac_date', 'hac_id', 'hab_id')
+        ->orderBy("hac_date", "asc")
         ->get();
     }
 }

@@ -23,8 +23,9 @@ class StoreHabitRequest extends FormRequest
     {
         return [
             "hab_name" => "required|string",
-            "hab_description" => "required|nullable|string",
-            "hab_type_recurrence" => "required|string"
+            "hab_description" => "nullable|string",
+            "hab_type_recurrence" => "required|string",
+            "hab_days_of_week" => "nullable|array"
         ];
     }
 }

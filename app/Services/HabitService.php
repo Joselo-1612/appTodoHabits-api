@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Enums\HabitEnum;
 use App\Enums\HabitRecurrence;
 use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
+use Log;
 
 class HabitService extends Controller
 {
@@ -16,17 +18,16 @@ class HabitService extends Controller
 
     public function registerHabitAndHabitDays($habit) {
 
-        $newHabit = $this->createHabit($habit);
+        $newHabit = $this->createUpdateHabit($habit);
 
-        if ($newHabit->getHabTypeRecurrence() == HabitRecurrence::PERSONALIZADO
-        && count($habit["hab_days"]) > 0) {
-            $this->habitDayService->createDaysHabit($habit["hab_days"], $newHabit);
+        if ($newHabit->getHabTypeRecurrence() == HabitEnum::RECURRENCE_PERSONALIZADO->value) {
+            $this->habitDayService->createUpdateDaysHabit($habit["hab_days_of_week"], $newHabit);
         }
 
         return $newHabit;
     }
 
-    private function createHabit(array $habit) {
+    private function createUpdateHabit(array $habit) {
         if (isset($habit["hab_id"])) {
             $habitFound = Habit::find($habit["hab_id"]);
             $habitFound->update($habit);

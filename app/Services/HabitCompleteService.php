@@ -46,6 +46,8 @@ class HabitCompleteService extends Controller
 
         $this->getCompleteWeeksHabitsComplete($currentWeek, $groupHabitsComplete);
 
+        ksort($groupHabitsComplete);
+
         $groupHabitsCompleteWithPercentage = $this->getPercentageHabitsComplete($groupHabitsComplete);
 
         return $groupHabitsCompleteWithPercentage;
