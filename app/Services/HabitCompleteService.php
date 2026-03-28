@@ -72,7 +72,11 @@ class HabitCompleteService extends Controller
 
         foreach ($groupHabitsComplete as $date => $habits) {
             $totalHabitsComplete = count($habits["habits"]);
-            $percentage = ($totalHabitsComplete / $totalHabits) * 100;
+            if ($totalHabits === 0) {
+                $percentage = 0;
+            } else {
+                $percentage = ($totalHabitsComplete / $totalHabits) * 100;
+            }
             $groupHabitsComplete[$date]['percentage'] = $percentage;
         }
 

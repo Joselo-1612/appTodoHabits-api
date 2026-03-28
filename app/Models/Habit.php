@@ -15,7 +15,9 @@ class Habit extends Model
         'hab_description',
         'hab_type_recurrence',
         'hab_status',
-        'hab_use_id'
+        'hab_use_id',
+        'hab_schedule',
+        'hab_is_pinned'
     ];
 
     // ------------------------
@@ -50,6 +52,16 @@ class Habit extends Model
     public function getHabUseId()
     {
         return $this->hab_use_id;
+    }
+
+    public function getHabSchedule()
+    {
+        return $this->hab_schedule;
+    }
+
+    public function getHabIsPinned()
+    {
+        return $this->hab_is_pinned;
     }
 
     // ------------------------
@@ -103,4 +115,17 @@ class Habit extends Model
     {
         return $this->hasMany(HabitDay::class, 'had_hab_id', 'hab_id');
     }
+
+    public function setHabSchedule($value)
+    {
+        $this->hab_schedule = $value;
+        return $this;
+    }
+
+    public function setHabIsPinned($value)
+    {
+        $this->hab_is_pinned = $value;
+        return $this;
+    }
+
 }

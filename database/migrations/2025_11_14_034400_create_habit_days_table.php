@@ -23,6 +23,8 @@ return new class extends Migration
                 'sabado',
                 'domingo'
             ]);
+            $table->string('had_description')->nullable();
+            $table->dateTime('had_schedule')->nullable();
             $table->integer('had_status')->default(1);
             $table->timestamps();
         });
