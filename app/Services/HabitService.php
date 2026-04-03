@@ -20,7 +20,7 @@ class HabitService extends Controller
 
         $newHabit = $this->createUpdateHabit($habit);
 
-        if ($newHabit->getHabTypeRecurrence() == HabitEnum::RECURRENCE_PERSONALIZADO->value) {
+        if (count($habit["hab_days_of_week"]) > 0) {
             $this->habitDayService->createUpdateDaysHabit($habit["hab_days_of_week"], $newHabit);
         }
 
