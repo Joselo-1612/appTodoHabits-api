@@ -19,9 +19,10 @@ class HabitService extends Controller
     public function registerHabitAndHabitDays($habit) {
 
         $newHabit = $this->createUpdateHabit($habit);
+        $habDaysWeek = $habit["hab_days_of_week"] ?? [];
 
-        if (count($habit["hab_days_of_week"]) > 0) {
-            $this->habitDayService->createUpdateDaysHabit($habit["hab_days_of_week"], $newHabit);
+        if (count($habDaysWeek) > 0) {
+            $this->habitDayService->createUpdateDaysHabit($habDaysWeek, $newHabit);
         }
 
         return $newHabit;

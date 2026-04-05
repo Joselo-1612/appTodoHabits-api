@@ -23,4 +23,8 @@ class HabitDayService extends Controller
             ]);
         }
     }
+
+    public function createUpdateDaysHabitNotPinned(array $habitDay)
+    {
+    }
 }
