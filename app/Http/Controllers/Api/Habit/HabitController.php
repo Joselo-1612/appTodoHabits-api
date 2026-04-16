@@ -29,7 +29,7 @@ class HabitController extends Controller
     }
 
     public function registerHabit(StoreHabitRequest $request){
-
+        // funcion registro
         try {
             $data = $request->validated();
 
