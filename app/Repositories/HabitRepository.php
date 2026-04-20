@@ -6,10 +6,8 @@ use App\Enums\HabitEnum;
 use App\Helpers\UtilHelper;
 use App\Models\Habit;
 use App\Models\HabitComplete;
-use Carbon\Carbon;
-use Log;
 
-class HabitCompleteRepository
+class HabitRepository
 {
 
     public function getDetailHabitComplete($habitId, $date)
@@ -33,6 +31,18 @@ class HabitCompleteRepository
         ->whereIn('hac_date', $weekDays)
         ->select('hac_date', 'hac_id', 'hab_id')
         ->orderBy("hac_date", "asc")
+        ->get();
+    }
+
+    public function getListHabitCompleteByPeriod($startDate, $endDate, $habitId)
+    {
+        $userId = UtilHelper::userSessionId();
+
+        return Habit::join('habit_completes', 'habits.hab_id', 'habit_completes.hac_hab_id')
+        ->where('habits.hab_use_id', $userId)
+        ->where('habits.hab_id', $habitId)
+        ->whereBetween('hac_date', [$startDate, $endDate])
+        ->select('hac_date', 'hac_id', 'hab_id', 'hab_type_recurrence')
         ->get();
     }
 }

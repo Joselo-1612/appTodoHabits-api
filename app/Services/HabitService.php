@@ -2,18 +2,19 @@
 
 namespace App\Services;
 
-use App\Enums\HabitEnum;
-use App\Enums\HabitRecurrence;
 use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
+use App\Repositories\HabitRepository;
 use Log;
 
 class HabitService extends Controller
 {
 
     public function __construct(
-        protected HabitDayService $habitDayService
+        protected HabitDayService $habitDayService,
+        protected HabitCompleteService $habitCompleteService,
+        protected HabitRepository $habitRepository
     ) {}
 
     public function registerHabitAndHabitDays($habit) {
@@ -41,5 +42,16 @@ class HabitService extends Controller
         }
 
         return $habitResponse;
+    }
+
+    public function getDetailHabit(string $habitId){
+
+    }
+
+    public function getReportCountDoneHabit($startDate, $endDate, $habitId){
+
+        $listHabitsDone = $this->habitCompleteService->getCountAllHabitsDone($startDate, $endDate, $habitId);
+
+        return $listHabitsDone;
     }
 }

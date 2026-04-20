@@ -52,4 +52,21 @@ class DateHelper
         return $week;
     }
 
+    public static function getMonthsInRange(string $startDate, string $endDate): array {
+        $start = new DateTime($startDate);
+        $end = new DateTime($endDate);
+
+        $start->modify('first day of this month');
+        $end->modify('first day of next month');
+
+        $months = [];
+
+        while ($start < $end) {
+            $months[] = $start->format('Y-m');
+            $start->modify('+1 month');
+        }
+
+        return $months;
+    }
+
 }

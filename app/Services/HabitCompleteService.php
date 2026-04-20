@@ -3,26 +3,27 @@
 namespace App\Services;
 
 use App\Helpers\DateHelper;
-use App\Helpers\StatusModel;
 use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
 use App\Models\HabitComplete;
-use App\Repositories\HabitCompleteRepository;
-use Carbon\Carbon;
+use App\Repositories\HabitRepository;
+use Date;
+use DateTime;
 use Log;
 
 class HabitCompleteService extends Controller
 {
     public function __construct(
-        protected HabitCompleteRepository $habitCompleteRepository
+        protected HabitDayService $habitDayService,
+        protected HabitRepository $habitRepository
     ) {}
 
     public function getlistHabitsComplete()
     {
         $currentWeek = DateHelper::getWeekCurrent();
 
-        $listHabitsComplete = $this->habitCompleteRepository->getListHabitComplete($currentWeek)->toArray();
+        $listHabitsComplete = $this->habitRepository->getListHabitComplete($currentWeek)->toArray();
 
         $groupHabitsComplete = $this->getGroupHabitByDate($listHabitsComplete);
 
@@ -85,7 +86,7 @@ class HabitCompleteService extends Controller
 
     public function doneOrSkippedHabit($habitId, $date)
     {
-        $habitComplete = $this->habitCompleteRepository->getDetailHabitComplete($habitId, $date);
+        $habitComplete = $this->habitRepository->getDetailHabitComplete($habitId, $date);
 
         if ($habitComplete) {
             $habitComplete->delete();
@@ -99,16 +100,31 @@ class HabitCompleteService extends Controller
         return $habitComplete;
     }
 
-    // public function writeNoteHabit($habitId, $note)
-    // {
-    //     $habitComplete = $this->habitCompleteRepository->getDetailHabitComplete($habitId);
+    public function getTotalHabitsDone($startDate, $endDate, $habitId, &$groupHabitsComplete){
+        $listHabitsDone = $this->habitRepository->getListHabitCompleteByPeriod($startDate, $endDate, $habitId);
 
-    //     if ($habitComplete) {
-    //         $habitComplete->update([
-    //             "hac_note" => $note
-    //         ]);
-    //     }
+        foreach ($listHabitsDone->toArray() as $habit) {
+            $date = new DateTime($habit['hac_date']);
+            $monthShort = (clone $date)->format('M');
+            $groupHabitsComplete[$monthShort]["totalDone"]++;
+        }
+    }
 
-    //     return $habitComplete;
-    // }
+    public function getCountAllHabitsDone($startDate, $endDate, $habitId) {
+        $groupHabitsComplete = [];
+
+        $this->habitDayService->getExpectTotalHabitsDone($startDate, $endDate, $habitId, $groupHabitsComplete);
+        $this->getTotalHabitsDone($startDate, $endDate, $habitId, $groupHabitsComplete);
+
+        return array_map(function ($month, $habit) {
+                return [
+                    "month" => $month,
+                    "totalDone" => $habit["totalDone"],
+                    "totalHabits" => $habit["totalHabits"],
+                ];
+            },
+            array_keys($groupHabitsComplete),
+            $groupHabitsComplete
+        );
+    }
 }

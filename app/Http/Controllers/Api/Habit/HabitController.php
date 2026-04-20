@@ -28,6 +28,31 @@ class HabitController extends Controller
         );
     }
 
+    public function getDetailHabit(string $habitId){
+        
+    }
+
+    public function getReportCountDoneHabit($startDate, $endDate, $habitId){
+
+        try {
+
+            $newHabit = $this->habitService->getReportCountDoneHabit($startDate, $endDate, $habitId);
+
+            return ApiResponse::successResponse(
+                $newHabit,
+                "habit report generated successfully",
+                200
+            );
+
+        } catch (ValidationException $e) {
+            return ApiResponse::errorResponse(
+                'Error generating habit report',
+                500,
+                $e->getMessage()
+            );
+        }
+    }
+
     public function registerHabit(StoreHabitRequest $request){
 
         try {
