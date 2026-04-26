@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Enums\HabitEnum;
+use App\Helpers\DataHelper;
 use App\Helpers\DateHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
 use App\Models\HabitDay;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 
 class HabitDayService extends Controller
 {
@@ -34,10 +37,24 @@ class HabitDayService extends Controller
                 return '+7 days';
             case 'mensual':
                 return '+1 month';
-            case 'personalizado':
-                $countHabitDay = HabitDay::where('had_hab_id', $habitId)->count();
-                return "+$countHabitDay days";
         }
+    }
+
+    private function getExpectTotalCustomized($startDate, $habitId)
+    {
+        $dateCurrent = new DateTime($startDate);
+        $monthCurrent = $dateCurrent->format('m');
+        $yearCurrent = $dateCurrent->format('Y');
+
+        $countHabitDay = HabitDay::where('had_hab_id', $habitId)->get();
+        $countTotal = 0;
+
+        foreach ($countHabitDay as $day) {
+            $dayNumber = DataHelper::getDayNumber($day->had_day);
+            $countTotal += DateHelper::getCountDaysInWeek($yearCurrent, $monthCurrent, $dayNumber);
+        }
+
+        return $countTotal;
     }
 
     public function getExpectTotalHabitsDone($startDate, $endDate, $habitId, &$groupHabitsComplete) {
@@ -53,13 +70,16 @@ class HabitDayService extends Controller
             $start = (clone $period)->modify('first day of this month');
             $end = (clone $period)->modify('last day of this month');
 
-            $typeRecurrence = $this->getValueTypeRecurrence($detailHabit->hab_type_recurrence, $habitId);
+            if ($detailHabit->hab_type_recurrence == HabitEnum::RECURRENCE_PERSONALIZADO->value) {
+                $countTotalHabits = $this->getExpectTotalCustomized($startDate, $habitId);
+            } else {
+                $countTotalHabits = 0;
+                $typeRecurrence = $this->getValueTypeRecurrence($detailHabit->hab_type_recurrence, $habitId);
 
-            $countTotalHabits = 0;
-
-            while ($start <= $end) {
-                $countTotalHabits++;
-                $start->modify($typeRecurrence);
+                while ($start <= $end) {
+                    $countTotalHabits++;
+                    $start->modify($typeRecurrence);
+                }
             }
 
             $groupHabitsComplete[$monthShort] = ["totalDone" => 0];

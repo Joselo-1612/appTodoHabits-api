@@ -128,4 +128,9 @@ class Habit extends Model
         return $this;
     }
 
+    public function getHabScheduleAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('H:i');
+    }
+
 }

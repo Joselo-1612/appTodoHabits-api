@@ -29,7 +29,23 @@ class HabitController extends Controller
     }
 
     public function getDetailHabit(string $habitId){
-        
+        try {
+
+            $newHabit = $this->habitService->getDetailHabit($habitId);
+
+            return ApiResponse::successResponse(
+                $newHabit,
+                "Query detail habit successfully",
+                200
+            );
+
+        } catch (ValidationException $e) {
+            return ApiResponse::errorResponse(
+                'Error generating habit report',
+                500,
+                $e->getMessage()
+            );
+        }
     }
 
     public function getReportCountDoneHabit($startDate, $endDate, $habitId){

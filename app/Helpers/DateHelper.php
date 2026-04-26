@@ -69,4 +69,19 @@ class DateHelper
         return $months;
     }
 
+    public static function getCountDaysInWeek($year, $month, $dayWeek) {
+
+        $start = new DateTime("$year-$month-01");
+        $dayMonth = $start->format('t');
+
+        $firstDayWeek = $start->format('N');
+
+        // calcular el primer día buscado dentro del mes
+        $firstDayFound = ($dayWeek >= $firstDayWeek)
+            ? ($dayWeek - $firstDayWeek + 1)
+            : (7 - $firstDayWeek + $dayWeek + 1);
+
+        // total de ocurrencias
+        return intval(floor(($dayMonth - $firstDayFound) / 7)) + 1;
+    }
 }
