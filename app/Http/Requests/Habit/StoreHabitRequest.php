@@ -22,6 +22,7 @@ class StoreHabitRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "hab_id" => "nullable|integer|exists:habits,hab_id",
             "hab_name" => "required|string",
             "hab_description" => "nullable|string",
             "hab_type_recurrence" => "required|string",

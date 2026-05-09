@@ -50,11 +50,14 @@ class HabitService extends Controller
     public function getDetailHabit($habitId){
         $detailHabit = Habit::find($habitId);
 
-        $listDaysHabit = $this->habitRepository->getListHabitDays($habitId);
+        $detailHabit->hab_days_of_week = $this->habitRepository->getListHabitDays($habitId)->pluck('had_day')->toArray();
+        $list_days_of_week = $this->habitRepository->getListHabitDays($habitId)->toArray();
+
+        Log::info("val-list_days_of_week", $list_days_of_week);
 
         return [
             'detailHabit' => $detailHabit,
-            'listDaysHabit' => $listDaysHabit
+            'listDaysOfWeek' => $list_days_of_week
         ];
     }
 
