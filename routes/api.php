@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Habit\HabitController;
 use App\Http\Controllers\Api\Habit\HabitCompleteController;
+use App\Http\Controllers\HabitDayController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,13 @@ Route::prefix('habit')->group(function () {
         Route::get('report/{startDate}/{endDate}/{habitId}', [HabitController::class,'getReportCountDoneHabit']);
         Route::post('register', [HabitController::class,'registerHabit']);
         Route::delete('delete/{id}', [HabitController::class,'deleteHabit']);
+    });
+});
+
+Route::prefix('habit-day')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('register', [HabitDayController::class,'registerHabitDay']);
+        Route::delete('delete/{id}', [HabitDayController::class,'deleteHabitDay']);
     });
 });
 

@@ -22,8 +22,11 @@ class StoreHabitDayRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "had_id" => "nullable|integer|exists:habit_days,had_id",
             "had_hab_id" => "required",
             "had_day" => "required|string",
+            "had_description" => "nullable|string",
+            "had_schedule" => "nullable|string"
         ];
     }
 }

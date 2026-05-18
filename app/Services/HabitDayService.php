@@ -9,8 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Habit;
 use App\Models\HabitDay;
 use DateTime;
-use Illuminate\Support\Facades\Log;
-
 class HabitDayService extends Controller
 {
     public function createUpdateDaysHabit(array $habitsDays, Habit $newHabit)
@@ -85,5 +83,28 @@ class HabitDayService extends Controller
             $groupHabitsComplete[$monthShort] = ["totalDone" => 0];
             $groupHabitsComplete[$monthShort]["totalHabits"] = $countTotalHabits;
         }
+    }
+
+    public function createUpdateOnlyHabitDay(array $habitDay) {
+
+        list ($had_id, $had_hab_id, $had_day, $had_description, $had_schedule) = $habitDay;
+
+        if ($had_id) {
+            $habitDay = HabitDay::find($had_id);
+            $habitDay->update([
+                'had_day' => $had_day,
+                'had_description' => $had_description,
+                'had_schedule' => $had_schedule
+            ]);
+            return $habitDay;
+        } else {
+            return HabitDay::create([
+                'had_hab_id' => $had_hab_id,
+                'had_day' => $had_day,
+                'had_description' => $had_description,
+                'had_schedule' => $had_schedule
+            ]);
+        }
+
     }
 }

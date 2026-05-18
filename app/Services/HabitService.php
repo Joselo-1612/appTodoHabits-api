@@ -2,13 +2,10 @@
 
 namespace App\Services;
 
-use App\Enums\HabitEnum;
 use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
-use App\Models\HabitDay;
 use App\Repositories\HabitRepository;
-use DateTime;
 use Log;
 
 class HabitService extends Controller
