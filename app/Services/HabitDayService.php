@@ -87,7 +87,11 @@ class HabitDayService extends Controller
 
     public function createUpdateOnlyHabitDay(array $habitDay) {
 
-        list ($had_id, $had_hab_id, $had_day, $had_description, $had_schedule) = $habitDay;
+        $had_id = $habitDay['had_id'] ?? null;
+
+        $had_day = $habitDay['had_day'] ?? null;
+        $had_description = $habitDay['had_description'] ?? null;
+        $had_schedule = $habitDay['had_schedule'] ?? null;
 
         if ($had_id) {
             $habitDay = HabitDay::find($had_id);
@@ -98,6 +102,9 @@ class HabitDayService extends Controller
             ]);
             return $habitDay;
         } else {
+
+            $had_hab_id = $habitDay['had_hab_id'] ?? null;
+
             return HabitDay::create([
                 'had_hab_id' => $had_hab_id,
                 'had_day' => $had_day,

@@ -14,7 +14,8 @@ class HabitDay extends Model
         'had_hab_id',
         'had_day',
         'had_description',
-        'had_schedule'
+        'had_schedule',
+        'had_status'
     ];
 
     // ------------------------
@@ -46,6 +47,11 @@ class HabitDay extends Model
         return $this->had_schedule;
     }
 
+    public function getHadStatus()
+    {
+        return $this->had_status;
+    }
+
     // ------------------------
     // Setters
     // ------------------------
@@ -71,6 +77,12 @@ class HabitDay extends Model
     public function setHadSchedule($value)
     {
         $this->had_schedule = $value;
+        return $this;
+    }
+
+    public function setHadStatus($value)
+    {
+        $this->had_status = $value;
         return $this;
     }
 

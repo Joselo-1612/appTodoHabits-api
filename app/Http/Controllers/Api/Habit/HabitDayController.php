@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Habit;
 
 use App\Enums\HabitEnum;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Habit\StoreHabitDayRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\HabitDay;
@@ -39,10 +40,16 @@ class HabitDayController extends Controller
     public function deleteHabitDay($idHabitDay) {
         try {
 
-        $habitDetail = HabitDay::findOrFail($idHabitDay);
-        $habitDetail->update([
-            "hab_status" => HabitEnum::INACTIVE->value
-        ]);
+            $habitDetail = HabitDay::findOrFail($idHabitDay);
+            $habitDetail->update([
+                "had_status" => HabitEnum::INACTIVE->value
+            ]);
+
+            return ApiResponse::successResponse(
+                $habitDetail,
+                "habit day delete succesfully",
+                200
+            );
 
         } catch (ValidationException $e) {
             return ApiResponse::errorResponse(

@@ -23,7 +23,7 @@ class StoreHabitDayRequest extends FormRequest
     {
         return [
             "had_id" => "nullable|integer|exists:habit_days,had_id",
-            "had_hab_id" => "required",
+            "had_hab_id" => "nullable|integer|exists:habits,hab_id",
             "had_day" => "required|string",
             "had_description" => "nullable|string",
             "had_schedule" => "nullable|string"
