@@ -60,4 +60,11 @@ class HabitRepository
             ->where('had_status', HabitEnum::ACTIVE->value)
             ->get();
     }
+
+    public function getExistHabitDayRegistered($habitDayId, $day){
+        return HabitDay::where('had_hab_id', $habitDayId)
+            ->where('had_day', $day)
+            ->where('had_status', HabitEnum::ACTIVE->value)
+            ->exists();
+    }
 }

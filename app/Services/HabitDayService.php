@@ -8,9 +8,15 @@ use App\Helpers\DateHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
 use App\Models\HabitDay;
+use App\Repositories\HabitRepository;
 use DateTime;
+use Log;
 class HabitDayService extends Controller
 {
+    public function __construct(
+        protected HabitRepository $habitRepository
+    ) {}
+
     public function createUpdateDaysHabit(array $habitsDays, Habit $newHabit)
     {
         $habitsDaysFind = $newHabit->habitDays()->pluck('had_day')->toArray();
@@ -85,6 +91,11 @@ class HabitDayService extends Controller
         }
     }
 
+
+    private function existHabitDay($habitDayId, $day) {
+        return $this->habitRepository->getExistHabitDayRegistered($habitDayId, $day);
+    }
+
     public function createUpdateOnlyHabitDay(array $habitDay) {
 
         $had_id = $habitDay['had_id'] ?? null;
@@ -95,6 +106,13 @@ class HabitDayService extends Controller
 
         if ($had_id) {
             $habitDay = HabitDay::find($had_id);
+
+            $existHabitDayRegisterd = $this->existHabitDay($habitDay->had_hab_id, $had_day);
+
+            if ($existHabitDayRegisterd) {
+                throw new \Exception("El día seleccionado ya se registro la actividad.");
+            }
+
             $habitDay->update([
                 'had_day' => $had_day,
                 'had_description' => $had_description,
@@ -104,6 +122,12 @@ class HabitDayService extends Controller
         } else {
 
             $had_hab_id = $habitDay['had_hab_id'] ?? null;
+
+            $existHabitDayRegisterd = $this->existHabitDay($had_hab_id, $had_day);
+
+            if ($existHabitDayRegisterd) {
+                throw new \Exception("El día del hábito ya existe.");
+            }
 
             return HabitDay::create([
                 'had_hab_id' => $had_hab_id,
