@@ -53,18 +53,40 @@ class HabitRepository
         return HabitDay::select(
             'had_id',
             'had_day',
-            'had_description',
-            DB::raw("TIME_FORMAT(had_schedule, '%H:%i') as had_schedule")
+            DB::raw("COALESCE(
+                    NULLIF(habit_days.had_description, ''),
+                    habits.hab_name) as had_description"),
+            DB::raw("
+                TIME_FORMAT(
+                    COALESCE(
+                        habit_days.had_schedule,
+                        habits.hab_schedule
+                    ),
+                    '%H:%i'
+                ) as had_schedule
+            ")
             )
+            ->join('habits', 'habits.hab_id','habit_days.had_hab_id')
             ->where('had_hab_id', $habitId)
             ->where('had_status', HabitEnum::ACTIVE->value)
+            ->orderByRaw("
+                COALESCE(
+                    habit_days.had_schedule,
+                    habits.hab_schedule
+                ) ASC
+            ")
             ->get();
     }
 
-    public function getExistHabitDayRegistered($habitDayId, $day){
-        return HabitDay::where('had_hab_id', $habitDayId)
-            ->where('had_day', $day)
-            ->where('had_status', HabitEnum::ACTIVE->value)
-            ->exists();
+    public function getExistHabitDayRegistered($habitDayId, $day, $isNew){
+
+        if ($isNew) {
+            return HabitDay::where('had_hab_id', $habitDayId)
+                ->where('had_day', $day)
+                ->where('had_status', HabitEnum::ACTIVE->value)
+                ->exists();
+        }
+
+        return false;
     }
 }

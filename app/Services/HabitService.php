@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\Enums\HabitEnum;
+use App\Helpers\DataHelper;
 use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
 use App\Repositories\HabitRepository;
-use Log;
 
 class HabitService extends Controller
 {
@@ -16,6 +17,13 @@ class HabitService extends Controller
         protected HabitCompleteService $habitCompleteService,
         protected HabitRepository $habitRepository
     ) {}
+
+    public function getListHabitByUser() {
+        $userIdSession = UtilHelper::userSessionId();
+
+        return Habit::where('hab_status', HabitEnum::ACTIVE->value)
+                    ->where('hab_use_id', $userIdSession)->get();
+    }
 
     public function registerHabitAndHabitDays($habit) {
 
@@ -50,8 +58,6 @@ class HabitService extends Controller
         $detailHabit->hab_days_of_week = $this->habitRepository->getListHabitDays($habitId)->pluck('had_day')->toArray();
         $list_days_of_week = $this->habitRepository->getListHabitDays($habitId)->toArray();
 
-        Log::info("val-list_days_of_week", $list_days_of_week);
-
         return [
             'detailHabit' => $detailHabit,
             'listDaysOfWeek' => $list_days_of_week
@@ -67,5 +73,38 @@ class HabitService extends Controller
             "totalHabit" => array_sum(array_column($listHabitsDone, "totalHabits")),
             "totalDone" => array_sum(array_column($listHabitsDone, "totalDone"))
         ];
+    }
+
+    private function getGenerateScheduleDaily($habit){
+        $listDays = DataHelper::getDayStrings();
+        $habitsSchedule = collect();
+
+        foreach ($listDays as $value) {
+            $habitsSchedule->add([
+                'had_id' => $habit->hab_id,
+                'had_day' => $value,
+                'had_description' => $habit->hab_description,
+                'had_schedule' => $habit->hab_schedule
+            ]);
+        }
+
+        return $habitsSchedule;
+    }
+
+    public function getGenerateSchedule(){
+        $listHabits = $this->getListHabitByUser();
+        $habitsSchedule = collect();
+
+        foreach ($listHabits as $habit) {
+            $days = $this->habitRepository->getListHabitDays($habit->hab_id);
+
+            // if (is_null($days)) {
+            //     $this->getGenerateScheduleDaily($habit);
+            // }
+
+            $habitsSchedule = $habitsSchedule->merge($days);
+        }
+
+        return $habitsSchedule;
     }
 }

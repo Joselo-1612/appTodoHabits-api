@@ -21,6 +21,10 @@ class HabitDayService extends Controller
     {
         $habitsDaysFind = $newHabit->habitDays()->pluck('had_day')->toArray();
 
+        $isTypeRecurrenceMonthOrWeek = $newHabit->hab_type_recurrence == HabitEnum::RECURRENCE_MENSUAL->value
+            || $newHabit->hab_type_recurrence == HabitEnum::RECURRENCE_SEMANAL->value
+            || ($newHabit->hab_type_recurrence == HabitEnum::RECURRENCE_PERSONALIZADO->value && $newHabit->hab_is_pinned);
+
         if (count($habitsDaysFind) > 0) {
             $newHabit->habitDays()->delete();
         }
@@ -29,6 +33,8 @@ class HabitDayService extends Controller
             HabitDay::create([
                 'had_day' => $day,
                 'had_hab_id' => $newHabit->getHabId(),
+                'had_description' => $isTypeRecurrenceMonthOrWeek ? $newHabit->hab_name : null,
+                'had_schedule' => $isTypeRecurrenceMonthOrWeek ? $newHabit->hab_schedule : null
             ]);
         }
     }
@@ -92,8 +98,8 @@ class HabitDayService extends Controller
     }
 
 
-    private function existHabitDay($habitDayId, $day) {
-        return $this->habitRepository->getExistHabitDayRegistered($habitDayId, $day);
+    private function existHabitDay($habitDayId, $day, $isNew) {
+        return $this->habitRepository->getExistHabitDayRegistered($habitDayId, $day, $isNew);
     }
 
     public function createUpdateOnlyHabitDay(array $habitDay) {
@@ -103,14 +109,15 @@ class HabitDayService extends Controller
         $had_day = $habitDay['had_day'] ?? null;
         $had_description = $habitDay['had_description'] ?? null;
         $had_schedule = $habitDay['had_schedule'] ?? null;
+        $had_is_new = $habitDay['had_is_new'];
 
         if ($had_id) {
             $habitDay = HabitDay::find($had_id);
 
-            $existHabitDayRegisterd = $this->existHabitDay($habitDay->had_hab_id, $had_day);
+            $existHabitDayRegisterd = $this->existHabitDay($habitDay->had_hab_id, $had_day, $had_is_new);
 
             if ($existHabitDayRegisterd) {
-                throw new \Exception("El día seleccionado ya se registro la actividad.");
+                throw new \Exception("El dia seleccionado ya se registro la actividad.");
             }
 
             $habitDay->update([
@@ -123,7 +130,7 @@ class HabitDayService extends Controller
 
             $had_hab_id = $habitDay['had_hab_id'] ?? null;
 
-            $existHabitDayRegisterd = $this->existHabitDay($had_hab_id, $had_day);
+            $existHabitDayRegisterd = $this->existHabitDay($had_hab_id, $had_day, $had_is_new);
 
             if ($existHabitDayRegisterd) {
                 throw new \Exception("El día del hábito ya existe.");

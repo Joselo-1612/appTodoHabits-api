@@ -25,5 +25,16 @@ class DataHelper
         }
     }
 
+    public static function getDayStrings(){
+        return [
+            "lunes",
+            "martes",
+            "miercoles",
+            "jueves",
+            "viernes",
+            "sabado",
+            "domingo"
+        ];
+    }
 
 }

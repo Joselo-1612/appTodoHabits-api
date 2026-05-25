@@ -104,18 +104,6 @@ class Habit extends Model
         return $this;
     }
 
-    // ------------------------ relationships ------------------------
-
-    public function habitCompletes()
-    {
-        return $this->hasMany(HabitComplete::class, 'hac_hab_id', 'hab_id');
-    }
-
-    public function habitDays()
-    {
-        return $this->hasMany(HabitDay::class, 'had_hab_id', 'hab_id');
-    }
-
     public function setHabSchedule($value)
     {
         $this->hab_schedule = $value;
@@ -128,13 +116,25 @@ class Habit extends Model
         return $this;
     }
 
-    public function getHabScheduleAttribute($value)
-    {
-        if ($value === null) {
-            return null;
-        }
+    // ------------------------ relationships ------------------------
 
-        return \Carbon\Carbon::parse($value)->format('H:i');
+    public function habitCompletes()
+    {
+        return $this->hasMany(HabitComplete::class, 'hac_hab_id', 'hab_id');
     }
+
+    public function habitDays()
+    {
+        return $this->hasMany(HabitDay::class, 'had_hab_id', 'hab_id');
+    }
+
+    // public function getHabScheduleAttribute($value)
+    // {
+    //     if ($value === null) {
+    //         return null;
+    //     }
+
+    //     return \Carbon\Carbon::parse($value)->format('H:i');
+    // }
 
 }

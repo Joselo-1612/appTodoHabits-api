@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\Habit;
 
 use App\Enums\HabitEnum;
-use App\Helpers\StatusModel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Habit\StoreHabitRequest;
 use App\Http\Responses\ApiResponse;
 use App\Services\HabitService;
 use App\Models\Habit;
 use Illuminate\Validation\ValidationException;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class HabitController extends Controller
 {
@@ -19,10 +19,10 @@ class HabitController extends Controller
 
     public function getlistHabitsActive() {
 
-        $listHabits = Habit::where('hab_status', 1)->get();
+        $habitService = $this->habitService->getListHabitByUser();
 
         return ApiResponse::successResponse(
-            $listHabits,
+            $habitService,
             'Query habits successfully',
             200
         );
@@ -116,5 +116,15 @@ class HabitController extends Controller
             "habit deleted succesfully",
             200
         );
+    }
+
+    public function generateSchedule() {
+        $habitService = $this->habitService->getGenerateSchedule();
+
+        $pdf = Pdf::loadView('report.habitsSchedule', [
+            'habits' => $habitService
+        ]);
+
+        return $pdf->download('horario-habitos.pdf');
     }
 }

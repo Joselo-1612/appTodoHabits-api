@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\HabitEnum;
 use App\Helpers\DateHelper;
 use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
@@ -69,7 +70,7 @@ class HabitCompleteService extends Controller
     private function getPercentageHabitsComplete(array &$groupHabitsComplete) {
 
         $userId = UtilHelper::userSessionId();
-        $totalHabits = Habit::where('hab_use_id', $userId)->count();
+        $totalHabits = Habit::where('hab_use_id', $userId)->where('hab_status', HabitEnum::ACTIVE->value)->count();
 
         foreach ($groupHabitsComplete as $date => $habits) {
             $totalHabitsComplete = count($habits["habits"]);
@@ -78,7 +79,7 @@ class HabitCompleteService extends Controller
             } else {
                 $percentage = ($totalHabitsComplete / $totalHabits) * 100;
             }
-            $groupHabitsComplete[$date]['percentage'] = $percentage;
+            $groupHabitsComplete[$date]['percentage'] = round($percentage, 2);
         }
 
         return $groupHabitsComplete;
