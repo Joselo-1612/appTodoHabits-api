@@ -28,7 +28,8 @@ class StoreHabitRequest extends FormRequest
             "hab_type_recurrence" => "required|string",
             "hab_days_of_week" => "nullable|array",
             "hab_is_pinned" => "boolean",
-            "hab_schedule" => "nullable|string"
+            "hab_schedule_ini" => "nullable|string",
+            "hab_schedule_end" => "nullable|string"
         ];
     }
 }

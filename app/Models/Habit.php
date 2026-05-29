@@ -16,7 +16,8 @@ class Habit extends Model
         'hab_type_recurrence',
         'hab_status',
         'hab_use_id',
-        'hab_schedule',
+        'hab_schedule_ini',
+        'hab_schedule_end',
         'hab_is_pinned'
     ];
 
@@ -54,14 +55,19 @@ class Habit extends Model
         return $this->hab_use_id;
     }
 
-    public function getHabSchedule()
-    {
-        return $this->hab_schedule;
-    }
-
     public function getHabIsPinned()
     {
         return $this->hab_is_pinned;
+    }
+
+    public function getHabScheduleIni()
+    {
+        return $this->hab_schedule_ini;
+    }
+
+    public function getHabScheduleEnd()
+    {
+        return $this->hab_schedule_end;
     }
 
     // ------------------------
@@ -104,17 +110,24 @@ class Habit extends Model
         return $this;
     }
 
-    public function setHabSchedule($value)
-    {
-        $this->hab_schedule = $value;
-        return $this;
-    }
-
     public function setHabIsPinned($value)
     {
         $this->hab_is_pinned = $value;
         return $this;
     }
+
+    public function setHabScheduleIni($value)
+    {
+        $this->hab_schedule_ini = $value;
+        return $this;
+    }
+
+    public function setHabScheduleEnd($value)
+    {
+        $this->hab_schedule_end = $value;
+        return $this;
+    }
+
 
     // ------------------------ relationships ------------------------
 
@@ -127,14 +140,5 @@ class Habit extends Model
     {
         return $this->hasMany(HabitDay::class, 'had_hab_id', 'hab_id');
     }
-
-    // public function getHabScheduleAttribute($value)
-    // {
-    //     if ($value === null) {
-    //         return null;
-    //     }
-
-    //     return \Carbon\Carbon::parse($value)->format('H:i');
-    // }
 
 }

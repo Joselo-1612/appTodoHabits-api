@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('hab_name');
             $table->text('hab_description')->nullable();
             $table->enum('hab_type_recurrence', ['diaria', 'semanal', 'mensual', 'personalizado']);
-            $table->dateTime('hab_schedule')->nullable();
+            $table->dateTime('hab_schedule_ini')->nullable();
+            $table->dateTime('hab_schedule_end')->nullable();
             $table->boolean('hab_is_pinned')->default(true);
             $table->integer('hab_status')->default(1);
             $table->foreignId('hab_use_id')->constrained('users', 'usu_id');

@@ -34,7 +34,8 @@ class HabitDayService extends Controller
                 'had_day' => $day,
                 'had_hab_id' => $newHabit->getHabId(),
                 'had_description' => $isTypeRecurrenceMonthOrWeek ? $newHabit->hab_name : null,
-                'had_schedule' => $isTypeRecurrenceMonthOrWeek ? $newHabit->hab_schedule : null
+                'had_schedule_ini' => $isTypeRecurrenceMonthOrWeek ? $newHabit->hab_schedule_ini : null,
+                'had_schedule_end' => $isTypeRecurrenceMonthOrWeek ? $newHabit->hab_schedule_end : null
             ]);
         }
     }
@@ -108,7 +109,8 @@ class HabitDayService extends Controller
 
         $had_day = $habitDay['had_day'] ?? null;
         $had_description = $habitDay['had_description'] ?? null;
-        $had_schedule = $habitDay['had_schedule'] ?? null;
+        $had_schedule_ini = $habitDay['had_schedule_ini'] ?? null;
+        $had_schedule_end = $habitDay['had_schedule_end'] ?? null;
         $had_is_new = $habitDay['had_is_new'];
 
         if ($had_id) {
@@ -123,7 +125,8 @@ class HabitDayService extends Controller
             $habitDay->update([
                 'had_day' => $had_day,
                 'had_description' => $had_description,
-                'had_schedule' => $had_schedule
+                'had_schedule_ini' => $had_schedule_ini,
+                'had_schedule_end' => $had_schedule_end
             ]);
             return $habitDay;
         } else {
@@ -140,7 +143,8 @@ class HabitDayService extends Controller
                 'had_hab_id' => $had_hab_id,
                 'had_day' => $had_day,
                 'had_description' => $had_description,
-                'had_schedule' => $had_schedule
+                'had_schedule_ini' => $had_schedule_ini,
+                'had_schedule_end' => $had_schedule_end
             ]);
         }
 

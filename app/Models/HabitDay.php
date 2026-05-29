@@ -14,7 +14,8 @@ class HabitDay extends Model
         'had_hab_id',
         'had_day',
         'had_description',
-        'had_schedule',
+        'had_schedule_ini',
+        'had_schedule_end',
         'had_status'
     ];
 
@@ -42,9 +43,14 @@ class HabitDay extends Model
         return $this->had_description;
     }
 
-    public function getHadSchedule()
+    public function getHadScheduleIni()
     {
-        return $this->had_schedule;
+        return $this->had_schedule_ini;
+    }
+
+    public function getHadScheduleEnd()
+    {
+        return $this->had_schedule_end;
     }
 
     public function getHadStatus()
@@ -74,9 +80,15 @@ class HabitDay extends Model
         return $this;
     }
 
-    public function setHadSchedule($value)
+    public function setHadScheduleIni($value)
     {
-        $this->had_schedule = $value;
+        $this->had_schedule_ini = $value;
+        return $this;
+    }
+
+    public function setHadScheduleEnd($value)
+    {
+        $this->had_schedule_end = $value;
         return $this;
     }
 

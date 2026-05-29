@@ -123,7 +123,7 @@ class HabitController extends Controller
 
         $pdf = Pdf::loadView('report.habitsSchedule', [
             'habits' => $habitService
-        ]);
+        ])->setPaper('a4', 'landscape');
 
         return $pdf->download('horario-habitos.pdf');
     }

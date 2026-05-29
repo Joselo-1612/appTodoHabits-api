@@ -24,7 +24,8 @@ return new class extends Migration
                 'domingo'
             ]);
             $table->string('had_description')->nullable();
-            $table->dateTime('had_schedule')->nullable();
+            $table->dateTime('had_schedule_ini')->nullable();
+            $table->dateTime('had_schedule_end')->nullable();
             $table->integer('had_status')->default(1);
             $table->timestamps();
         });

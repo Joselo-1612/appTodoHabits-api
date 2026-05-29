@@ -26,7 +26,8 @@ class StoreHabitDayRequest extends FormRequest
             "had_hab_id" => "nullable|integer|exists:habits,hab_id",
             "had_day" => "required|string",
             "had_description" => "nullable|string",
-            "had_schedule" => "nullable|string",
+            "had_schedule_ini" => "nullable|string",
+            "had_schedule_end" => "nullable|string",
             "had_is_new" => "boolean"
         ];
     }

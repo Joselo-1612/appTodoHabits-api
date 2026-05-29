@@ -84,4 +84,10 @@ class DateHelper
         // total de ocurrencias
         return intval(floor(($dayMonth - $firstDayFound) / 7)) + 1;
     }
+
+    public static function getConvertDateTiemeToTime($date){
+        $date = new DateTime($date);
+
+        return $date->format('H:i');
+    }
 }

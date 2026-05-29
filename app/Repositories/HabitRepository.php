@@ -59,11 +59,20 @@ class HabitRepository
             DB::raw("
                 TIME_FORMAT(
                     COALESCE(
-                        habit_days.had_schedule,
-                        habits.hab_schedule
+                        habit_days.had_schedule_ini,
+                        habits.hab_schedule_ini
                     ),
                     '%H:%i'
-                ) as had_schedule
+                ) as had_schedule_ini
+            "),
+            DB::raw("
+                TIME_FORMAT(
+                    COALESCE(
+                        habit_days.had_schedule_end,
+                        habits.hab_schedule_end
+                    ),
+                    '%H:%i'
+                ) as had_schedule_end
             ")
             )
             ->join('habits', 'habits.hab_id','habit_days.had_hab_id')
@@ -71,8 +80,8 @@ class HabitRepository
             ->where('had_status', HabitEnum::ACTIVE->value)
             ->orderByRaw("
                 COALESCE(
-                    habit_days.had_schedule,
-                    habits.hab_schedule
+                    habit_days.had_schedule_ini,
+                    habits.hab_schedule_ini
                 ) ASC
             ")
             ->get();

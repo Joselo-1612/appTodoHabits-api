@@ -4,10 +4,12 @@ namespace App\Services;
 
 use App\Enums\HabitEnum;
 use App\Helpers\DataHelper;
+use App\Helpers\DateHelper;
 use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
 use App\Repositories\HabitRepository;
+use Log;
 
 class HabitService extends Controller
 {
@@ -80,11 +82,13 @@ class HabitService extends Controller
         $habitsSchedule = collect();
 
         foreach ($listDays as $value) {
-            $habitsSchedule->add([
+
+            $habitsSchedule->add((object)[
                 'had_id' => $habit->hab_id,
                 'had_day' => $value,
                 'had_description' => $habit->hab_description,
-                'had_schedule' => $habit->hab_schedule
+                'had_schedule_ini' => DateHelper::getConvertDateTiemeToTime($habit->hab_schedule_ini),
+                'had_schedule_end' => DateHelper::getConvertDateTiemeToTime($habit->hab_schedule_end)
             ]);
         }
 
@@ -98,13 +102,16 @@ class HabitService extends Controller
         foreach ($listHabits as $habit) {
             $days = $this->habitRepository->getListHabitDays($habit->hab_id);
 
-            // if (is_null($days)) {
-            //     $this->getGenerateScheduleDaily($habit);
-            // }
+            Log::info("val-days", ['days' => $days]);
+
+            if (count($days) === 0) {
+                $daysDaily = $this->getGenerateScheduleDaily($habit);
+                $habitsSchedule = $habitsSchedule->merge($daysDaily);
+            }
 
             $habitsSchedule = $habitsSchedule->merge($days);
         }
 
-        return $habitsSchedule;
+        return $habitsSchedule->sortBy('had_schedule_ini');
     }
 }

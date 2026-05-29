@@ -9,9 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Habit;
 use App\Models\HabitComplete;
 use App\Repositories\HabitRepository;
-use Date;
 use DateTime;
-use Log;
 
 class HabitCompleteService extends Controller
 {

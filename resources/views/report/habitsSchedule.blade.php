@@ -65,7 +65,7 @@
             <td>
                 @foreach ($habits->where('had_day', 'lunes') as $h)
                     <div class="block">
-                        <span class="hour">{{ $h->had_schedule }}</span>
+                        <span class="hour">{{ $h->had_schedule_ini }} - {{ $h->had_schedule_end }}</span>
                         {{ $h->had_description }}
                     </div>
                 @endforeach
@@ -75,7 +75,7 @@
             <td>
                 @foreach ($habits->where('had_day', 'martes') as $h)
                     <div class="block">
-                        <span class="hour">{{ $h->had_schedule }}</span>
+                        <span class="hour">{{ $h->had_schedule_ini }} - {{ $h->had_schedule_end }}</span>
                         {{ $h->had_description }}
                     </div>
                 @endforeach
@@ -85,7 +85,7 @@
             <td>
                 @foreach ($habits->where('had_day', 'miercoles') as $h)
                     <div class="block">
-                        <span class="hour">{{ $h->had_schedule }}</span>
+                        <span class="hour">{{ $h->had_schedule_ini }} - {{ $h->had_schedule_end }}</span>
                         {{ $h->had_description }}
                     </div>
                 @endforeach
@@ -95,7 +95,7 @@
             <td>
                 @foreach ($habits->where('had_day', 'jueves') as $h)
                     <div class="block">
-                        <span class="hour">{{ $h->had_schedule }}</span>
+                        <span class="hour">{{ $h->had_schedule_ini }} - {{ $h->had_schedule_end }}</span>
                         {{ $h->had_description }}
                     </div>
                 @endforeach
@@ -105,7 +105,7 @@
             <td>
                 @foreach ($habits->where('had_day', 'viernes') as $h)
                     <div class="block">
-                        <span class="hour">{{ $h->had_schedule }}</span>
+                        <span class="hour">{{ $h->had_schedule_ini }} - {{ $h->had_schedule_end }}</span>
                         {{ $h->had_description }}
                     </div>
                 @endforeach
@@ -115,7 +115,7 @@
             <td>
                 @foreach ($habits->where('had_day', 'sabado') as $h)
                     <div class="block">
-                        <span class="hour">{{ $h->had_schedule }}</span>
+                        <span class="hour">{{ $h->had_schedule_ini }} - {{ $h->had_schedule_end }}</span>
                         {{ $h->had_description }}
                     </div>
                 @endforeach
@@ -125,7 +125,7 @@
             <td>
                 @foreach ($habits->where('had_day', 'domingo') as $h)
                     <div class="block">
-                        <span class="hour">{{ $h->had_schedule }}</span>
+                        <span class="hour">{{ $h->had_schedule_ini }} - {{ $h->had_schedule_end }}</span>
                         {{ $h->had_description }}
                     </div>
                 @endforeach
