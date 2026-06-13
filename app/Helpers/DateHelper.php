@@ -90,4 +90,11 @@ class DateHelper
 
         return $date->format('H:i');
     }
+
+    public static function getConvertDateTimeToDay($date){
+        $date = new DateTime($date);
+        $dayInEnglish = $date->format('l');
+
+        return self::translateDay($dayInEnglish);
+    }
 }

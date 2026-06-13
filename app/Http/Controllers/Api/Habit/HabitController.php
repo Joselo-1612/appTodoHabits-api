@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Habit;
 
 use App\Enums\HabitEnum;
+use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Habit\StoreHabitRequest;
 use App\Http\Responses\ApiResponse;
@@ -10,6 +11,7 @@ use App\Services\HabitService;
 use App\Models\Habit;
 use Illuminate\Validation\ValidationException;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Log;
 
 class HabitController extends Controller
 {
@@ -18,6 +20,12 @@ class HabitController extends Controller
     ) {}
 
     public function getlistHabitsActive() {
+
+        $sessionName = UtilHelper::sessionNameUser();
+        $cachedUser = UtilHelper::cacheUser();
+
+        Log::info("Nombre de usuario en sesión: {$sessionName}");
+        Log::info("Usuario en caché: {$cachedUser}");
 
         $habitService = $this->habitService->getListHabitByUser();
 

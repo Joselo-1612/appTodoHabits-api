@@ -8,8 +8,10 @@ use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Habit;
 use App\Models\HabitComplete;
+use App\Models\HabitDay;
 use App\Repositories\HabitRepository;
 use DateTime;
+use Log;
 
 class HabitCompleteService extends Controller
 {
@@ -27,6 +29,29 @@ class HabitCompleteService extends Controller
         $groupHabitsComplete = $this->getGroupHabitByDate($listHabitsComplete);
 
         return $groupHabitsComplete;
+    }
+
+    private function isHabitAvailableInDay($habitId, $date): bool
+    {
+        $habiDetail = Habit::find($habitId);
+
+        if ($habiDetail->hab_type_recurrence == HabitEnum::RECURRENCE_DIARIO->value) {
+            return true;
+        }
+
+        $dayText = DateHelper::getConvertDateTimeToDay($date);
+
+        $exists = HabitDay::where('had_hab_id', $habitId)
+            ->where('had_day', $dayText)
+            ->exists();
+
+        if (!$exists) {
+            throw new \Exception(
+                "El hábito no está habilitado para el día {$dayText}"
+            );
+        }
+
+        return true;
     }
 
     private function getGroupHabitByDate(array $arrHabitsComplete) {
@@ -85,6 +110,13 @@ class HabitCompleteService extends Controller
 
     public function doneOrSkippedHabit($habitId, $date)
     {
+    
+        // if (!$this->isHabitAvailableInDay($habitId, $date)) {
+        //     throw new \Exception("El habito no esta habilitado para el día seleccionado.");
+        // }
+
+        $this->isHabitAvailableInDay($habitId, $date);
+
         $habitComplete = $this->habitRepository->getDetailHabitComplete($habitId, $date);
 
         if ($habitComplete) {

@@ -86,7 +86,7 @@ class HabitService extends Controller
             $habitsSchedule->add((object)[
                 'had_id' => $habit->hab_id,
                 'had_day' => $value,
-                'had_description' => $habit->hab_description,
+                'had_description' => $habit->hab_name,
                 'had_schedule_ini' => DateHelper::getConvertDateTiemeToTime($habit->hab_schedule_ini),
                 'had_schedule_end' => DateHelper::getConvertDateTiemeToTime($habit->hab_schedule_end)
             ]);
