@@ -13,6 +13,7 @@ class UtilHelper
         return auth()->user()->usu_id;
     }
 
+    // Ejemplo de session
     public static function sessionNameUser(){
 
         Redis::set('nombre', 'Gonzalo el usuario');
@@ -20,6 +21,7 @@ class UtilHelper
         return Redis::get('nombre');
     }
 
+    // Ejemplo de cache
     public static function cacheUser(){
         Cache::put('usuario', 'Gonzalo', 3600);
         return Cache::get('usuario');

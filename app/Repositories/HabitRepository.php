@@ -7,6 +7,7 @@ use App\Helpers\UtilHelper;
 use App\Models\Habit;
 use App\Models\HabitComplete;
 use App\Models\HabitDay;
+use Date;
 use DB;
 
 class HabitRepository
@@ -21,6 +22,15 @@ class HabitRepository
                 ->where('hac_date', $date)
                 ->where('habits.hab_use_id', $userId)
                 ->first();
+    }
+
+    public function getListHabitCalendar() {
+        $userIdSession = UtilHelper::userSessionId();
+
+        return Habit::select('hab_id','hab_name', 'hab_type_recurrence', 'hab_schedule_ini', 'had_day')
+                    ->leftJoin('habit_days', 'habits.hab_id', 'habit_days.had_hab_id')
+                    ->where('hab_status', HabitEnum::ACTIVE->value)
+                    ->where('hab_use_id', $userIdSession)->get();
     }
 
     public function getListHabitComplete(array $weekDays)

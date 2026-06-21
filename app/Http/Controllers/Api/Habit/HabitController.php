@@ -9,6 +9,7 @@ use App\Http\Requests\Habit\StoreHabitRequest;
 use App\Http\Responses\ApiResponse;
 use App\Services\HabitService;
 use App\Models\Habit;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Log;
@@ -28,6 +29,18 @@ class HabitController extends Controller
         Log::info("Usuario en caché: {$cachedUser}");
 
         $habitService = $this->habitService->getListHabitByUser();
+
+        return ApiResponse::successResponse(
+            $habitService,
+            'Query habits successfully',
+            200
+        );
+    }
+
+    public function getlistHabitsCalendar(Request $request) {
+        $period = $request->query('period');
+
+        $habitService = $this->habitService->getListHabitCalendar($period);
 
         return ApiResponse::successResponse(
             $habitService,

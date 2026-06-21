@@ -2,16 +2,11 @@
 
 namespace App\Services;
 
-use App\Enums\HabitEnum;
 use App\Helpers\DateHelper;
-use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
-use App\Models\Habit;
 use App\Models\HabitComplete;
-use App\Models\HabitDay;
 use App\Repositories\HabitRepository;
 use DateTime;
-use Log;
 
 class HabitCompleteService extends Controller
 {
@@ -20,9 +15,9 @@ class HabitCompleteService extends Controller
         protected HabitRepository $habitRepository
     ) {}
 
-    public function getlistHabitsComplete()
+    public function getlistHabitsComplete($date)
     {
-        $currentWeek = DateHelper::getWeekCurrent();
+        $currentWeek = DateHelper::getCurrentMonth($date);
 
         $listHabitsComplete = $this->habitRepository->getListHabitComplete($currentWeek)->toArray();
 
@@ -31,32 +26,9 @@ class HabitCompleteService extends Controller
         return $groupHabitsComplete;
     }
 
-    private function isHabitAvailableInDay($habitId, $date): bool
-    {
-        $habiDetail = Habit::find($habitId);
-
-        if ($habiDetail->hab_type_recurrence == HabitEnum::RECURRENCE_DIARIO->value) {
-            return true;
-        }
-
-        $dayText = DateHelper::getConvertDateTimeToDay($date);
-
-        $exists = HabitDay::where('had_hab_id', $habitId)
-            ->where('had_day', $dayText)
-            ->exists();
-
-        if (!$exists) {
-            throw new \Exception(
-                "El hábito no está habilitado para el día {$dayText}"
-            );
-        }
-
-        return true;
-    }
-
     private function getGroupHabitByDate(array $arrHabitsComplete) {
         $groupHabitsComplete = [];
-        $currentWeek = DateHelper::getWeekCurrent();
+        $currentMonth = DateHelper::getCurrentMonth();
 
         foreach ($arrHabitsComplete as $habitComplete) {
 
@@ -69,18 +41,16 @@ class HabitCompleteService extends Controller
             $groupHabitsComplete[$date]["habits"][] = $habitComplete;
         }
 
-        $this->getCompleteWeeksHabitsComplete($currentWeek, $groupHabitsComplete);
+        $this->getCompleteWeeksHabitsComplete($currentMonth, $groupHabitsComplete);
 
         ksort($groupHabitsComplete);
 
-        $groupHabitsCompleteWithPercentage = $this->getPercentageHabitsComplete($groupHabitsComplete);
-
-        return $groupHabitsCompleteWithPercentage;
+        return $groupHabitsComplete;
     }
 
-    private function getCompleteWeeksHabitsComplete(array $arrWeek, array &$groupHabitsComplete) {
+    private function getCompleteWeeksHabitsComplete(array $arrMonth, array &$groupHabitsComplete) {
 
-        foreach ($arrWeek as $day) {
+        foreach ($arrMonth as $day) {
             if (!isset($groupHabitsComplete[$day])) {
 
                 $groupHabitsComplete[$day] = [
@@ -90,32 +60,8 @@ class HabitCompleteService extends Controller
         }
     }
 
-    private function getPercentageHabitsComplete(array &$groupHabitsComplete) {
-
-        $userId = UtilHelper::userSessionId();
-        $totalHabits = Habit::where('hab_use_id', $userId)->where('hab_status', HabitEnum::ACTIVE->value)->count();
-
-        foreach ($groupHabitsComplete as $date => $habits) {
-            $totalHabitsComplete = count($habits["habits"]);
-            if ($totalHabits === 0) {
-                $percentage = 0;
-            } else {
-                $percentage = ($totalHabitsComplete / $totalHabits) * 100;
-            }
-            $groupHabitsComplete[$date]['percentage'] = round($percentage, 2);
-        }
-
-        return $groupHabitsComplete;
-    }
-
     public function doneOrSkippedHabit($habitId, $date)
     {
-    
-        // if (!$this->isHabitAvailableInDay($habitId, $date)) {
-        //     throw new \Exception("El habito no esta habilitado para el día seleccionado.");
-        // }
-
-        $this->isHabitAvailableInDay($habitId, $date);
 
         $habitComplete = $this->habitRepository->getDetailHabitComplete($habitId, $date);
 

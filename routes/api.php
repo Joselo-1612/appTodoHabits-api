@@ -26,6 +26,7 @@ Route::prefix('habit')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('detail/{id}',[HabitController::class,'getDetailHabit']);
         Route::get('list', [HabitController::class,'getlistHabitsActive']);
+        Route::get('list-calendar', [HabitController::class,'getlistHabitsCalendar']);
         Route::get('schedule', [HabitController::class,'generateSchedule']);
         Route::get('report/{startDate}/{endDate}/{habitId}', [HabitController::class,'getReportCountDoneHabit']);
         Route::post('register', [HabitController::class,'registerHabit']);

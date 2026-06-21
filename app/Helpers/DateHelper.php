@@ -20,36 +20,34 @@ class DateHelper
         $map = [
             'Monday' => 'lunes',
             'Tuesday' => 'martes',
-            'Wednesday' => 'miércoles',
+            'Wednesday' => 'miercoles',
             'Thursday' => 'jueves',
             'Friday' => 'viernes',
-            'Saturday' => 'sábado',
+            'Saturday' => 'sabado',
             'Sunday' => 'domingo',
         ];
 
         return $map[$day] ?? $day;
     }
 
-    public static function getWeekCurrent(): array
+    public static function getCurrentMonth($currentMonth = null): array
     {
-        $week = [];
+        $days = [];
 
-        $today = new DateTime();
-        $dayWeek = (int) $today->format('w'); // 0 = domingo, 6 = sábado
+        $today = $currentMonth ? new DateTime($currentMonth) : new DateTime();
 
-        // Clonar fecha actual
-        $startWeek = clone $today;
+        // Primer día del mes
+        $startMonth = new DateTime($today->format('Y-m-01'));
 
-        // Ir al domingo de la semana actual
-        $startWeek->modify("-{$dayWeek} days");
+        // Último día del mes
+        $endMonth = new DateTime($today->format('Y-m-t'));
 
-        for ($i = 0; $i < 7; $i++) {
-            $date = clone $startWeek;
-            $date->modify("+{$i} days");
-            $week[] = $date->format('Y-m-d');
+        while ($startMonth <= $endMonth) {
+            $days[] = $startMonth->format('Y-m-d');
+            $startMonth->modify('+1 day');
         }
 
-        return $week;
+        return $days;
     }
 
     public static function getMonthsInRange(string $startDate, string $endDate): array {
@@ -91,10 +89,21 @@ class DateHelper
         return $date->format('H:i');
     }
 
-    public static function getConvertDateTimeToDay($date){
+    public static function getConvertDateTimeToDayText($date){
         $date = new DateTime($date);
         $dayInEnglish = $date->format('l');
 
         return self::translateDay($dayInEnglish);
+    }
+
+    public static function getConvertDateTimeToDayNumber($date){
+        $date = new DateTime($date);
+        return $date->format('d');
+    }
+
+
+    public static function getConvertDateTimeToDate($date){
+        $date = new DateTime($date);
+        return $date->format('Y-m-d');
     }
 }

@@ -16,11 +16,11 @@ class HabitCompleteController extends Controller
     ) {}
 
 
-    public function getlistHabitsComplete() {
+    public function getlistHabitsComplete(Request $request) {
 
         try {
-
-            $listHabitsComplete = $this->habitCompleteService->getlistHabitsComplete();
+            $date = $request->query('period');
+            $listHabitsComplete = $this->habitCompleteService->getlistHabitsComplete($date);
 
             return ApiResponse::successResponse(
                 $listHabitsComplete,

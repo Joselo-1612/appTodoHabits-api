@@ -27,6 +27,70 @@ class HabitService extends Controller
                     ->where('hab_use_id', $userIdSession)->get();
     }
 
+    public function getListHabitCalendar($month = null)
+    {
+        $currentMonth = DateHelper::getCurrentMonth($month);
+        $habitService = $this->habitRepository->getListHabitCalendar();
+
+        // Indexar hábitos (clave de optimización)
+        $dailyHabits = [];
+        $weeklyHabits = [];
+        $monthlyHabits = [];
+
+        foreach ($habitService as $habit) {
+
+            switch ($habit->hab_type_recurrence) {
+
+                case HabitEnum::RECURRENCE_DIARIO->value:
+                    $dailyHabits[] = $habit;
+                    break;
+
+                case HabitEnum::RECURRENCE_SEMANAL->value:
+                case HabitEnum::RECURRENCE_PERSONALIZADO->value:
+                    $weeklyHabits[] = $habit;
+                    break;
+
+                case HabitEnum::RECURRENCE_MENSUAL->value:
+                    $monthlyHabits[] = $habit;
+                    break;
+            }
+        }
+
+        return $this->processHabitsByCalendar($currentMonth, $dailyHabits, $weeklyHabits, $monthlyHabits);
+    }
+
+    private function processHabitsByCalendar($currentMonth, $dailyHabits, $weeklyHabits, $monthlyHabits) {
+
+        foreach ($currentMonth as $date) {
+
+            $habitListCalendar[$date] = [];
+
+            $dayText = DateHelper::getConvertDateTimeToDayText($date);
+            $dayNumber = DateHelper::getConvertDateTimeToDayNumber($date);
+
+            // DIARIOS → siempre entran
+            foreach ($dailyHabits as $habit) {
+                $habitListCalendar[$date][] = [ "hab_id" => $habit->hab_id, "hab_name" => $habit->hab_name];
+            }
+
+            // SEMANALES / PERSONALIZADOS → por día de semana
+            foreach ($weeklyHabits as $habit) {
+                if ($habit->had_day === $dayText) {
+                    $habitListCalendar[$date][] = [ "hab_id" => $habit->hab_id, "hab_name" => $habit->hab_name];
+                }
+            }
+
+            // MENSUALES → por número de día
+            foreach ($monthlyHabits as $habit) {
+                if (DateHelper::getConvertDateTimeToDayNumber($habit->hab_schedule_ini) === $dayNumber) {
+                    $habitListCalendar[$date][] = [ "hab_id" => $habit->hab_id, "hab_name" => $habit->hab_name];
+                }
+            }
+        }
+
+        return $habitListCalendar;
+    }
+
     public function registerHabitAndHabitDays($habit) {
 
         $newHabit = $this->createUpdateHabit($habit);
