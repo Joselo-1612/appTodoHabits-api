@@ -101,7 +101,6 @@ class DateHelper
         return $date->format('d');
     }
 
-
     public static function getConvertDateTimeToDate($date){
         $date = new DateTime($date);
         return $date->format('Y-m-d');
