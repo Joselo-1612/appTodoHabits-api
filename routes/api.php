@@ -55,3 +55,9 @@ Route::prefix('project')->group(function () {
     });
 });
 
+Route::prefix('project-group')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('list', [ProjectController::class,'list']);
+    });
+});
+

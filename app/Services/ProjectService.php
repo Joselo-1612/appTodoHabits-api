@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Enums\ProjectEnum;
+use App\Helpers\UtilHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\ProjectGroup;
 
 class ProjectService extends Controller
 {
@@ -11,6 +14,10 @@ class ProjectService extends Controller
     public function __construct(
         protected ProjectGroupService $projectGroupService,
     ) {}
+
+    public function list() {
+        return ProjectGroup::where('prg_status', ProjectEnum::ACTIVE->value)->get();
+    }
 
     public function create($dataProject){
 
