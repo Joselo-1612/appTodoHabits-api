@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api\Habit;
 
-use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
 use App\Services\HabitCompleteService;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
-class HabitCompleteController extends Controller
+class HabitCompleteController
 {
 
     public function __construct(

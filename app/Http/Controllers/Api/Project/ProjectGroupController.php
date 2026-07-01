@@ -1,30 +1,29 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Project;
 
-use Illuminate\Http\Request;
+use App\Helpers\UtilHelper;
+use App\Http\Responses\ApiResponse;
+use App\Services\ProjectGroupService;
 
-class ProjectGroupController extends Controller
+class ProjectGroupController
 {
     //
 
     public function __construct(
-        protected ProjectService $projectService
+        protected ProjectGroupService $projectService
     ) {}
 
-    public function getlistHabitsActive() {
+    public function list() {
 
         $sessionName = UtilHelper::sessionNameUser();
         $cachedUser = UtilHelper::cacheUser();
 
-        Log::info("Nombre de usuario en sesión: {$sessionName}");
-        Log::info("Usuario en caché: {$cachedUser}");
-
-        $habitService = $this->habitService->getListHabitByUser();
+        $projectService = $this->projectService->getList();
 
         return ApiResponse::successResponse(
-            $habitService,
-            'Query habits successfully',
+            $projectService,
+            'Query projects successfully',
             200
         );
     }

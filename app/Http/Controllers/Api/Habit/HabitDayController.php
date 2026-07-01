@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Api\Habit;
 
 use App\Enums\HabitEnum;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Habit\StoreHabitDayRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\HabitDay;
 use App\Services\HabitDayService;
 use Dotenv\Exception\ValidationException;
 
-class HabitDayController extends Controller
+class HabitDayController
 {
     public function __construct(
         protected HabitDayService $habitService

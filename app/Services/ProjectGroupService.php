@@ -2,18 +2,17 @@
 
 namespace App\Services;
 
-use App\Http\Controllers\Controller;
 use App\Models\ProjectGroup;
 use App\Repositories\ProjectRepository;
 
-class ProjectGroupService extends Controller
+class ProjectGroupService
 {
     public function __construct(
         protected ProjectRepository $projectRepository,
     ) {}
 
     public function getList() {
-        return $this->projectRepository->getList();
+        return $this->projectRepository->getListProjectGroup();
     }
 
     public function findGroupProject(string $nameGroup) {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Habit;
 
 use App\Enums\HabitEnum;
 use App\Helpers\UtilHelper;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Habit\StoreHabitRequest;
 use App\Http\Responses\ApiResponse;
 use App\Services\HabitService;
@@ -14,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Log;
 
-class HabitController extends Controller
+class HabitController
 {
     public function __construct(
         protected HabitService $habitService

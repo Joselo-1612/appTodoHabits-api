@@ -1,17 +1,41 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Project;
 
+use App\Enums\ProjectEnum;
+use App\Helpers\UtilHelper;
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Responses\ApiResponse;
+use App\Models\Project;
 use App\Services\ProjectService;
 use Illuminate\Validation\ValidationException;
 
-class ProjectController extends Controller
+class ProjectController
 {
     public function __construct(
         protected ProjectService $projectService
     ) {}
+
+    public function list(){
+        try {
+            $userId = UtilHelper::userSessionId();
+
+            $newProject = Project::where('user_id', $userId)->where('pro_status', ProjectEnum::ACTIVE->value)->get();
+
+            return ApiResponse::successResponse(
+                $newProject,
+                "project registered successfully",
+                201
+            );
+
+        } catch (ValidationException $e) {
+            return ApiResponse::errorResponse(
+                'Error validating request data',
+                422,
+                $e->getMessage()
+            );
+        }
+    }
 
     public function create(StoreProjectRequest $request){
 

@@ -6,7 +6,8 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Habit\HabitController;
 use App\Http\Controllers\Api\Habit\HabitCompleteController;
 use App\Http\Controllers\Api\Habit\HabitDayController;
-use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\Api\Project\ProjectController;
+use App\Http\Controllers\Api\Project\ProjectGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -51,13 +52,14 @@ Route::prefix('habit-complete')->group(function () {
 
 Route::prefix('project')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
+        Route::post('list', [ProjectController::class,'list']);
         Route::post('create', [ProjectController::class,'create']);
     });
 });
 
 Route::prefix('project-group')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('list', [ProjectController::class,'list']);
+        Route::get('list', [ProjectGroupController::class,'list']);
     });
 });
 
