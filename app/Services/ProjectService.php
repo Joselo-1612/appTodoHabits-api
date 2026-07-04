@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use App\Enums\ProjectEnum;
 use App\Helpers\UtilHelper;
 use App\Models\Project;
-use App\Models\ProjectGroup;
 use App\Repositories\ProjectRepository;
 use Log;
 
@@ -18,10 +16,24 @@ class ProjectService
     ) {}
 
     public function list() {
-        $userId = UtilHelper::userSessionId();
+        $listProjects = $this->projectRepository->getListProject();
+        $listGroupProjects = [];
 
-        $listProject = $this->projectRepository->getListProject();
+        foreach ($listProjects as $project) {
 
+            Log::info("Project: " . $project);
+
+            if (!isset($listGroupProjects[$project->prg_name])) {
+                $listGroupProjects[$project->prg_name] = [];
+            }
+
+            $listGroupProjects[$project->prg_name][] = [
+                'pro_id' => $project->pro_id,
+                'pro_name' => $project->pro_name
+            ];
+        }
+
+        return $listGroupProjects;
     }
 
     public function create($dataProject){

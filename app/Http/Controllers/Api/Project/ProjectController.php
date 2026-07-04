@@ -18,13 +18,12 @@ class ProjectController
 
     public function list(){
         try {
-            $userId = UtilHelper::userSessionId();
 
-            $newProject = Project::where('user_id', $userId)->where('pro_status', ProjectEnum::ACTIVE->value)->get();
+            $listProjects = $this->projectService->list();
 
             return ApiResponse::successResponse(
-                $newProject,
-                "project registered successfully",
+                $listProjects,
+                "projects listed successfully",
                 201
             );
 

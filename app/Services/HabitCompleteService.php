@@ -8,7 +8,7 @@ use App\Models\HabitComplete;
 use App\Repositories\HabitRepository;
 use DateTime;
 
-class HabitCompleteService extends Controller
+class HabitCompleteService
 {
     public function __construct(
         protected HabitDayService $habitDayService,

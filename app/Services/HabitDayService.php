@@ -11,7 +11,7 @@ use App\Models\HabitDay;
 use App\Repositories\HabitRepository;
 use DateTime;
 use Log;
-class HabitDayService extends Controller
+class HabitDayService
 {
     public function __construct(
         protected HabitRepository $habitRepository

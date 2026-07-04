@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
-class AuthController extends Controller
+class AuthController
 {
 
     public function register(RegisterUserRequest $request): JsonResponse

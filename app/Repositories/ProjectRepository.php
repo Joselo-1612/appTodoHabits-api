@@ -20,7 +20,7 @@ class ProjectRepository
 
         return Project::select('pro_id', 'pro_name', 'prg_name')
             ->join('project_groups', 'projects.pro_prg_id', '=', 'project_groups.prg_id')
-            ->where('projects.user_id', $userIdSession)
+            ->where('projects.pro_use_id', $userIdSession)
             ->where('projects.pro_status', ProjectEnum::ACTIVE->value)
             ->get();
     }

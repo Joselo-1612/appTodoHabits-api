@@ -52,7 +52,7 @@ Route::prefix('habit-complete')->group(function () {
 
 Route::prefix('project')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('list', [ProjectController::class,'list']);
+        Route::get('list', [ProjectController::class,'list']);
         Route::post('create', [ProjectController::class,'create']);
     });
 });

@@ -11,7 +11,7 @@ use App\Models\Habit;
 use App\Repositories\HabitRepository;
 use Log;
 
-class HabitService extends Controller
+class HabitService
 {
 
     public function __construct(
@@ -165,8 +165,6 @@ class HabitService extends Controller
 
         foreach ($listHabits as $habit) {
             $days = $this->habitRepository->getListHabitDays($habit->hab_id);
-
-            Log::info("val-days", ['days' => $days]);
 
             if (count($days) === 0) {
                 $daysDaily = $this->getGenerateScheduleDaily($habit);
