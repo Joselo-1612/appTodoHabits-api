@@ -24,4 +24,10 @@ class Activity extends Model
     {
         return $this->belongsToMany(Tag::class, 'activity_x_tags', 'axt_act_id', 'axt_tag_id');
     }
+
+    public function activitySection()
+    {
+        return $this->belongsTo(ActivitySection::class, 'act_sea_id', 'acs_id');
+    }
+
 }

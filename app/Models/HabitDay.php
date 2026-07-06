@@ -19,10 +19,6 @@ class HabitDay extends Model
         'had_status'
     ];
 
-    // ------------------------
-    // Getters
-    // ------------------------
-
     public function getHadId()
     {
         return $this->had_id;
@@ -57,10 +53,6 @@ class HabitDay extends Model
     {
         return $this->had_status;
     }
-
-    // ------------------------
-    // Setters
-    // ------------------------
 
     public function setHadHabId($value)
     {

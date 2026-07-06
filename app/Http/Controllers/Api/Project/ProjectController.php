@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Api\Project;
 
-use App\Enums\ProjectEnum;
-use App\Helpers\UtilHelper;
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Responses\ApiResponse;
-use App\Models\Project;
 use App\Services\ProjectService;
 use Illuminate\Validation\ValidationException;
 
@@ -24,6 +21,26 @@ class ProjectController
             return ApiResponse::successResponse(
                 $listProjects,
                 "projects listed successfully",
+                201
+            );
+
+        } catch (ValidationException $e) {
+            return ApiResponse::errorResponse(
+                'Error validating request data',
+                422,
+                $e->getMessage()
+            );
+        }
+    }
+
+    public function detail(string $projectId) {
+        try {
+
+            $detailProject = $this->projectService->detail($projectId);
+
+            return ApiResponse::successResponse(
+                $detailProject,
+                "project detail retrieved successfully",
                 201
             );
 

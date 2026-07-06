@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\ProjectEnum;
 use App\Helpers\UtilHelper;
+use App\Models\ActivitySection;
 use App\Models\Project;
 use App\Models\ProjectGroup;
 
@@ -29,5 +30,12 @@ class ProjectRepository
         return ProjectGroup::where('prg_name', 'LIKE', "%{$nameGroup}%")
                             ->where('prg_status', ProjectEnum::ACTIVE->value)
                             ->first();
+    }
+
+    public function getListSectionActivities($projectId){
+        return ActivitySection::join('activities', 'activity_sections.acs_id', '=', 'activities.act_sea_id')
+                                ->where('acs_pro_id', $projectId)
+                                ->where('acs_status', ProjectEnum::ACTIVE->value)
+                                ->get();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Helpers\UtilHelper;
+use App\Models\ActivitySection;
 use App\Models\Project;
 use App\Repositories\ProjectRepository;
 use Log;
@@ -59,5 +60,23 @@ class ProjectService
             'pro_prg_id' => $projectGroupId,
             'pro_use_id' => $userId
         ]);
+    }
+
+    public function detail($projectId) {
+         $detailSections = [];
+         $project = Project::firstWhere('pro_id', $projectId);
+         Log::info("val-project", [$project]);
+
+         $sections = $project->activitySection;
+         Log::info("Activity sections for project " . $project->pro_id . ": " . json_encode($sections));
+
+         foreach ($sections as $section) {
+            $detailSections[] = $section;
+         }
+
+         return [
+            "detail" => $project,
+            "sections" => $detailSections
+        ];
     }
 }

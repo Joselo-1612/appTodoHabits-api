@@ -54,6 +54,7 @@ Route::prefix('project')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('list', [ProjectController::class,'list']);
         Route::post('create', [ProjectController::class,'create']);
+        Route::get('detail/{id}', [ProjectController::class,'detail']);
     });
 });
 
