@@ -26,6 +26,11 @@ class ProjectRepository
             ->get();
     }
 
+    public function getDetailProjectById($projectId){
+        return Project::select('pro_id', 'pro_name', 'pro_description', 'pro_priority', 'pro_date_start', 'pro_date_end')
+            ->firstWhere('pro_id', $projectId);
+    }
+
     public function findGroupProject(string $nameGroup) {
         return ProjectGroup::where('prg_name', 'LIKE', "%{$nameGroup}%")
                             ->where('prg_status', ProjectEnum::ACTIVE->value)

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ProjectEnum;
 use App\Helpers\UtilHelper;
 use App\Models\ActivitySection;
 use App\Models\Project;
@@ -62,21 +63,35 @@ class ProjectService
         ]);
     }
 
-    public function detail($projectId) {
-         $detailSections = [];
-         $project = Project::firstWhere('pro_id', $projectId);
-         Log::info("val-project", [$project]);
+    public function detail($projectId)
+    {
+        $project = $this->projectRepository->getDetailProjectById($projectId);
 
-         $sections = $project->activitySection;
-         Log::info("Activity sections for project " . $project->pro_id . ": " . json_encode($sections));
+        $sections = $project->activitySection()
+            ->select('acs_id', 'acs_name')
+            ->where('acs_status', ProjectEnum::ACTIVE->value)
+            ->with([
+                'activities' => function ($query) {
+                    $query->select(
+                        'act_id',
+                        'act_sea_id',
+                        'act_name',
+                        'act_description',
+                        'act_date_start',
+                        'act_date_end'
+                    )
+                    ->where('act_status', ProjectEnum::ACTIVE->value);
+                }
+            ])
+            ->get();
 
-         foreach ($sections as $section) {
-            $detailSections[] = $section;
-         }
+        Log::info("Activity sections for project {$project->pro_id}", [
+            'sections' => $sections
+        ]);
 
-         return [
-            "detail" => $project,
-            "sections" => $detailSections
+        return [
+            'detail' => $project,
+            'sections' => $sections,
         ];
     }
 }
