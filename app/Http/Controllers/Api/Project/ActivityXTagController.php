@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Project;
 
 use Illuminate\Http\Request;
 
-class ActivityXTagController extends Controller
+class ActivityXTagController
 {
     //
 }

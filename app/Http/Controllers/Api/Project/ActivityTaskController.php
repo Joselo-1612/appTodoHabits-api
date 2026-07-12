@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Api\Project;
 use Illuminate\Http\Request;
 
-class ActivityTaskController extends Controller
+class ActivityTaskController
 {
     //
 }

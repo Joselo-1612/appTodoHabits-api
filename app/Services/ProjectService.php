@@ -78,16 +78,15 @@ class ProjectService
                         'act_name',
                         'act_description',
                         'act_date_start',
-                        'act_date_end'
+                        'act_date_end',
                     )
+                    ->with(['tags' => function ($query) {
+                        $query->select('tag_color');
+                    }])->get()
                     ->where('act_status', ProjectEnum::ACTIVE->value);
                 }
             ])
             ->get();
-
-        Log::info("Activity sections for project {$project->pro_id}", [
-            'sections' => $sections
-        ]);
 
         return [
             'detail' => $project,

@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Habit\HabitController;
 use App\Http\Controllers\Api\Habit\HabitCompleteController;
 use App\Http\Controllers\Api\Habit\HabitDayController;
+use App\Http\Controllers\Api\Project\ActivityController;
+use App\Http\Controllers\Api\Project\ActivitySectionController;
 use App\Http\Controllers\Api\Project\ProjectController;
 use App\Http\Controllers\Api\Project\ProjectGroupController;
 use Illuminate\Http\Request;
@@ -64,3 +66,9 @@ Route::prefix('project-group')->group(function () {
     });
 });
 
+Route::prefix('activity')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('section-activity', [ActivitySectionController::class,'create']);
+        Route::post('create', [ActivityController::class,'create']);
+    });
+});

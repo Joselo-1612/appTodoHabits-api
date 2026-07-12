@@ -1,10 +1,37 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Project;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Project\StoreActivityRequest;
+use App\Http\Responses\ApiResponse;
+use App\Services\ActivityService;
+use Illuminate\Validation\ValidationException;
 
-class ActivityController extends Controller
+class ActivityController
 {
-    //
+    public function __construct(
+        protected ActivityService $activityService
+    ) {}
+
+    public function create(StoreActivityRequest $request){
+
+        try {
+            $data = $request->validated();
+
+            $newActivity = $this->activityService->createActivity($data);
+
+            return ApiResponse::successResponse(
+                $newActivity,
+                "activity created successfully",
+                201
+            );
+
+        } catch (ValidationException $e) {
+            return ApiResponse::errorResponse(
+                'Error validating request data',
+                422,
+                $e->getMessage()
+            );
+        }
+    }
 }
