@@ -34,4 +34,24 @@ class ActivityController
             );
         }
     }
+
+    public function updateActivitySection(int $sectionId, int $activityId) {
+        try {
+
+            $updateActivity = $this->activityService->updateActivyBySection($sectionId, $activityId);
+
+            return ApiResponse::successResponse(
+                $updateActivity,
+                "activity updated successfully",
+                200
+            );
+
+        } catch (ValidationException $e) {
+            return ApiResponse::errorResponse(
+                'Error validating request data',
+                422,
+                $e->getMessage()
+            );
+        }
+    }
 }

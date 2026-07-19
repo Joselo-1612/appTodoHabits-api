@@ -57,4 +57,9 @@ class ActivityService
             "acs_status" => ProjectEnum::ACTIVE->value
         ]);
     }
+
+    public function updateActivyBySection(int $sectionId, int $activityId){
+        return Activity::where('act_id', $activityId)
+            ->update(['act_sea_id' => $sectionId]);
+    }
 }
