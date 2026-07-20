@@ -17,7 +17,8 @@ class Activity extends Model
         'act_date_start',
         'act_date_end',
         'act_sea_id',
-        'act_status'
+        'act_status',
+        'act_position'
     ];
 
     public function tags()

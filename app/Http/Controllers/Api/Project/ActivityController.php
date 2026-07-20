@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Project;
 use App\Http\Requests\Project\StoreActivityRequest;
 use App\Http\Responses\ApiResponse;
 use App\Services\ActivityService;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class ActivityController
@@ -35,10 +36,12 @@ class ActivityController
         }
     }
 
-    public function updateActivitySection(int $sectionId, int $activityId) {
+    public function updateActivitySection(Request $request, int $sectionId, int $activityId) {
         try {
 
-            $updateActivity = $this->activityService->updateActivyBySection($sectionId, $activityId);
+            $positionActivity = $request->input('actPosition');
+
+            $updateActivity = $this->activityService->updateActivyBySection($sectionId, $activityId, $positionActivity);
 
             return ApiResponse::successResponse(
                 $updateActivity,

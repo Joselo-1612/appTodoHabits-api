@@ -27,7 +27,7 @@ class StoreActivityRequest extends FormRequest
             'act_description' => 'nullable|string',
             'act_date_start' => 'nullable|date',
             'act_date_end' => 'nullable|date',
-            'act_sea_id' => 'required|exists:activity_sections,acs_id',
+            'act_sea_id' => 'required|exists:activity_sections,acs_id'
         ];
     }
 }

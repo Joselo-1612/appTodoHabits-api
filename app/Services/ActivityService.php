@@ -39,13 +39,17 @@ class ActivityService
     }
 
     public function createActivity($data){
+
+        $positionAcvitity = Activity::where('act_sea_id', $data['act_sea_id'])->count('act_position') + 1;
+
         return Activity::create([
             "act_name" => $data['act_name'],
             "act_description" => $data['act_description'],
             "act_date_start" => Carbon::now(),
             "act_date_end" => Carbon::now(),
             "act_sea_id" => $data['act_sea_id'],
-            "act_status" => ProjectEnum::ACTIVE->value
+            "act_status" => ProjectEnum::ACTIVE->value,
+            "act_position" => $positionAcvitity
         ]);
     }
 
@@ -58,8 +62,8 @@ class ActivityService
         ]);
     }
 
-    public function updateActivyBySection(int $sectionId, int $activityId){
+    public function updateActivyBySection(int $sectionId, int $activityId, int $positionActivity){
         return Activity::where('act_id', $activityId)
-            ->update(['act_sea_id' => $sectionId]);
+            ->update(['act_sea_id' => $sectionId, 'act_position' => $positionActivity]);
     }
 }

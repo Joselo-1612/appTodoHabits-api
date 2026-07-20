@@ -29,7 +29,7 @@ class StoreProjectRequest extends FormRequest
             'pro_date_start' => 'required|date',
             'pro_date_end' => 'required|date|after:pro_date_start',
             'pro_group' => 'required|string',
-            'pro_use_id' => 'required|exists:users,usu_id'
+            // 'pro_use_id' => 'required|exists:users,usu_id'
         ];
     }
 }

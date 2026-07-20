@@ -82,7 +82,9 @@ class ProjectService
                     )
                     ->with(['tags' => function ($query) {
                         $query->select('tag_color');
-                    }])->get()
+                    }])
+                    ->orderBy('act_position', 'asc')
+                    ->get()
                     ->where('act_status', ProjectEnum::ACTIVE->value);
                 }
             ])

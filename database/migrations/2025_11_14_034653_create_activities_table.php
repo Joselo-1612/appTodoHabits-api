@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('act_date_start');
             $table->date('act_date_end');
             $table->foreignId('act_sea_id')->constrained('activity_sections', 'acs_id');
+            $table->integer('act_position');
             $table->integer('act_status')->default(1);
             $table->timestamps();
         });
