@@ -70,6 +70,7 @@ Route::prefix('activity')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('section-activity', [ActivitySectionController::class,'create']);
         Route::post('create', [ActivityController::class,'create']);
+        Route::get('detail/{id}', [ActivityController::class,'detail']);
         Route::put('activity-by-section/{sectionId}/{activityId}', [ActivityController::class,'updateActivitySection']);
     });
 });

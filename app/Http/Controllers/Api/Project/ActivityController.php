@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Project;
 
 use App\Http\Requests\Project\StoreActivityRequest;
 use App\Http\Responses\ApiResponse;
+use App\Models\Activity;
 use App\Services\ActivityService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -47,6 +48,26 @@ class ActivityController
                 $updateActivity,
                 "activity updated successfully",
                 200
+            );
+
+        } catch (ValidationException $e) {
+            return ApiResponse::errorResponse(
+                'Error validating request data',
+                422,
+                $e->getMessage()
+            );
+        }
+    }
+
+    public function detail(string $id){
+
+        try {
+            $detailActivity = Activity::firstWhere('act_id', $id);
+
+            return ApiResponse::successResponse(
+                $detailActivity,
+                "detailActivity retrieved successfully",
+                201
             );
 
         } catch (ValidationException $e) {
